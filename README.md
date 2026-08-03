@@ -6,6 +6,8 @@ Trilium Notes 文本笔记排版规范与转换工具（SKILL.md 格式，供 AI
 
 [English](README.en.md) | 简体中文
 
+> 💡 **SKILL.md 为中文撰写**：如需其他语言版本，可使用任意大模型（如 ChatGPT、DeepSeek、Kimi 等）自行翻译——直接把 `SKILL.md` 全文交给模型，要求翻译并保持 YAML frontmatter 与 Markdown 结构不变即可。
+
 ---
 
 ## 下载与快速开始

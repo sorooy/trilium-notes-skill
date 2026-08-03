@@ -6,6 +6,8 @@ Based on the official docs: [Trilium Text note type](https://docs.triliumnotes.o
 
 **English** | [简体中文](README.md)
 
+> 💡 **SKILL.md is written in Chinese.** For other languages, translate it yourself with any LLM (ChatGPT, DeepSeek, Kimi, etc.): paste the whole `SKILL.md` into the model and ask it to translate while keeping the YAML frontmatter and Markdown structure unchanged.
+
 ---
 
 ## Download & Quick Start
