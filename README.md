@@ -4,6 +4,8 @@ Trilium Notes 文本笔记排版规范与转换工具（SKILL.md 格式，供 AI
 
 根据官方文档 [Trilium Text 笔记类型](https://docs.triliumnotes.org/user-guide/note-types/text) 整理。
 
+[English](README.en.md) | 简体中文
+
 ---
 
 ## 下载与快速开始
