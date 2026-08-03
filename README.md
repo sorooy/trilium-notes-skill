@@ -6,6 +6,42 @@ Trilium Notes 文本笔记排版规范与转换工具（SKILL.md 格式，供 AI
 
 ---
 
+## 下载与快速开始
+
+### 方式 A：整包下载（推荐）
+
+| 平台 | 命令 / 链接 |
+|------|-------------|
+| GitHub | `git clone https://github.com/sorooy/trilium-text-formatting.git` 或 [下载 ZIP](https://github.com/sorooy/trilium-text-formatting/archive/refs/heads/main.zip) |
+| GitCode | `git clone https://gitcode.com/op00007/trilium-text-formatting.git` 或 [下载 ZIP](https://gitcode.com/op00007/trilium-text-formatting/-/archive/main/trilium-text-formatting-main.zip) |
+
+### 方式 B：只要转换脚本（零依赖）
+
+```bash
+# GitHub 或 GitCode 任选其一
+curl -O https://raw.githubusercontent.com/sorooy/trilium-text-formatting/main/scripts/md_to_trilium.py
+# curl -O https://gitcode.com/op00007/trilium-text-formatting/raw/main/scripts/md_to_trilium.py
+
+python md_to_trilium.py --selftest   # 先自检
+```
+
+### 30 秒快速开始
+
+```bash
+# 1. 下载后进入项目目录
+cd trilium-text-formatting
+
+# 2. 转换你的 Markdown 笔记
+python scripts/md_to_trilium.py 我的笔记.md -o out.html
+
+# 3. 写入 Trilium（应用需在运行，Token 在 Options → ETAPI 创建）
+curl -X PUT "http://localhost:37840/etapi/notes/<noteId>/content" \
+  -H "Authorization: <TOKEN>" -H "Content-Type: text/plain" \
+  --data-binary @out.html
+```
+
+---
+
 ## 1. 有什么能力
 
 **排版规范（SKILL.md）**
