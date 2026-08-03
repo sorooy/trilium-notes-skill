@@ -1,7 +1,7 @@
 ---
 name: trilium-text-formatting
 description: 整理/生成 Trilium 文本笔记排版内容时使用。官方 HTML 结构 + Markdown 快捷方式规范。
-version: 1.0.0
+version: 1.1.0
 author: 石中钰
 platforms: [windows]
 ---
@@ -91,7 +91,7 @@ platforms: [windows]
 
 ## 排版工作流（整理一个杂乱笔记）
 
-1. 读取原内容（API 或 SQLite，见 `trilium-notes` skill）
+1. 读取原内容（**优先 ETAPI**：`GET /etapi/notes/{id}/content`；应用未运行时才走 SQLite，见 `trilium-notes` skill 的铁律）
 2. 识别结构：标题层级、列表、引用、代码、表格、待办
 3. 转成上面的语义 HTML：
    - Markdown `##` → `<h2>`（**整体降一级**：原 `#` 标题 → `<h2>`，因为 h1 留给笔记标题）
@@ -102,7 +102,19 @@ platforms: [windows]
    - `---` → `<hr>`
    - 表格管道语法 → `<table>`
 4. 写入前**备份**（文档 `.db.backup_时间戳` 或导出）
-5. 写入并验证（回读内容、检查长度、抽查开头标签）
+5. 写入并验证（**回读走 API** `GET /etapi/notes/{id}/content` 确认应用真实状态，不要只看数据库）
+
+## 一键转换脚本（scripts/md_to_trilium.py）
+
+纯标准库，把 Markdown 转成 Trilium 兼容 HTML（标题自动降一级、列表嵌套、待办转 ☐/☑、代码块转义）：
+
+```bash
+python scripts/md_to_trilium.py input.md            # 输出 HTML
+python scripts/md_to_trilium.py input.md -o out.html
+python scripts/md_to_trilium.py --selftest          # 自检
+```
+
+转换结果可直接 `PUT /etapi/notes/{id}/content` 写入。局限：真待办/表格/提示框的插件专属 HTML 需编辑器内插入或手工写。
 
 ## 关联
 
