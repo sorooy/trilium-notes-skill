@@ -109,7 +109,7 @@ Token 在 Trilium 菜单 → Options → ETAPI 创建。
 ### 方式一：Hermes Agent（推荐）
 ```bash
 git clone https://gitcode.com/op00007/trilium-text-formatting.git
-# 将整个仓库内容放入 skills 目录（如 D:\Hermes\hermes-data\skills\note-taking\trilium-text-formatting\）
+# 将整个仓库内容放入 skills 目录（如 <你的skills目录>/note-taking/trilium-text-formatting/）
 ```
 
 ### 方式二：其他 AI 助手（Claude Code / Codex / Cursor 等）

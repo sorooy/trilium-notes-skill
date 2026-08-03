@@ -2,7 +2,7 @@
 name: trilium-text-formatting
 description: 整理/生成 Trilium 文本笔记排版内容时使用。官方 HTML 结构 + Markdown 快捷方式规范。
 version: 1.1.0
-author: 石中钰
+author: sorooy
 platforms: [windows]
 ---
 
