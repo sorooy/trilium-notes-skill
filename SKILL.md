@@ -1,7 +1,7 @@
 ---
 name: trilium-text-formatting
 description: 整理/生成 Trilium 文本笔记排版内容时使用。官方 HTML 结构 + Markdown 快捷方式规范。
-version: 1.1.0
+version: 1.2.0
 author: sorooy
 platforms: [windows]
 ---
@@ -88,6 +88,15 @@ platforms: [windows]
 - **Math**：TeX 格式，KaTeX 渲染；行内 `$...$`、块级 `$$...$$`（Display mode 居中）
 - **内部链接**：@ 或 Ctrl+L 插入；"Link title mirrors" 类型会跟随笔记标题变化；复制笔记树节点 Ctrl+C 后 Ctrl+V 粘贴也能生成链接
 - 大笔记会只读打开；配色注意深/浅主题对比度
+
+## ⚠️ 铁律：排版不改内容
+
+**只改结构/格式，绝不增删改原文文字。**
+
+- ❌ 不删除、不合并、不重写任何原文内容（含标题文字、列表项、段落、标点）
+- ❌ 不添加原文没有的内容（不补全、不扩写、不「优化措辞」）
+- ✅ 允许的改动仅限：标签语义化（`<div><strong>` → `<h2>`）、清理格式污染（`data-list-item-id`、`ck-*`、`relin*` 等样式残留）、实体转义、中英间空格规范化
+- ⚠️ 插件注入的译注（如 Relingo 的 `(我)/(独家)` 等**插入内容**）与原文混在一起时：默认保留原文词，译注属插件添加物，可删可不删——不确定时保留，宁多勿删
 
 ## 排版工作流（整理一个杂乱笔记）
 
