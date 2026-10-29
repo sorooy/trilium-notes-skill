@@ -51,13 +51,15 @@ curl -X PUT "http://localhost:37840/etapi/notes/<noteId>/content" \
 **Formatting spec (SKILL.md)**
 - Core rules: Text notes store content as HTML (CKEditor). **H1 is reserved for the note title** — use H2~H6 in the body.
 - Markdown-like shortcut reference (active while typing in the editor): headings, bold/italic/strike, lists, to-dos, quotes, code blocks, horizontal rule, admonitions, math, internal links, etc.
-- HTML semantic tag reference (for writing content via API/scripts): headings, paragraphs, emphasis, super/subscript, colors, lists, tables, quotes, code, horizontal rule, external/internal links.
+- HTML semantic tag reference (for writing content via API/scripts, based on real Trilium 0.104.1 editor output): headings, paragraphs, emphasis, super/subscript, text colors, **five `aside.admonition` callouts**, font-size classes, highlight markers, to-dos, tables, collapsible blocks, footnotes, mermaid, anchors, link embeds, page breaks, internal links.
 - Pitfalls checklist: never mix Markdown syntax into HTML (it renders literally), never stack `<br>` for layout, always escape HTML entities.
 - Full workflow: read → identify structure → convert → backup → write & verify.
 
 **Converter (scripts/md_to_trilium.py)**
 - Markdown → Trilium-compatible HTML, **headings auto-shifted down one level** (`#` → `<h2>`).
 - Supports: bold/italic/strike/inline code, bullet & numbered lists (nested), to-dos (→ ☐/☑), blockquotes, fenced code (auto-escaped), horizontal rule, paragraphs.
+- `--from-html`: repairs legacy notes where Markdown was pasted as plain text inside `<p>`/`<br>`.
+- `> [!NOTE]` / `[!TIP]` / `[!IMPORTANT]` / `[!CAUTION]` / `[!WARNING]` → native Trilium admonitions.
 - Pure Python standard library, zero dependencies, Python 3.8+, built-in `--selftest`.
 
 **Write channel (pairs with the `trilium-notes` skill)**
