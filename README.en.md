@@ -16,7 +16,7 @@ Based on the official docs: [Trilium Text note type](https://docs.triliumnotes.o
 
 | Platform | Command / Link |
 |----------|----------------|
-| GitHub | `git clone https://github.com/sorooy/trilium-text-formatting-skill.git` or [Download ZIP](https://github.com/sorooy/trilium-text-formatting-skill/archive/refs/heads/main.zip) |
+| GitHub | `git clone https://github.com/sorooy/trilium-notes-skill.git` or [Download ZIP](https://github.com/sorooy/trilium-notes-skill/archive/refs/heads/main.zip) |
 | GitCode | `git clone https://gitcode.com/op00007/trilium-text-formatting.git` or [Download ZIP](https://gitcode.com/op00007/trilium-text-formatting/-/archive/main/trilium-text-formatting-main.zip) |
 
 ### Option B: Script only (zero dependencies)
@@ -114,7 +114,7 @@ Output:
 
 ### Method 1: Hermes Agent (recommended)
 ```bash
-git clone https://github.com/sorooy/trilium-text-formatting-skill.git
+git clone https://github.com/sorooy/trilium-notes-skill.git
 # Put the whole repo into your skills directory (e.g. <your-skills-dir>/note-taking/trilium-text-formatting/)
 ```
 
