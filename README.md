@@ -51,13 +51,15 @@ curl -X PUT "http://localhost:37840/etapi/notes/<noteId>/content" \
 **排版规范（SKILL.md）**
 - 核心规则：Text 笔记内容以 HTML 存储（CKEditor），**H1 被笔记标题占用**，正文只能用 H2~H6
 - Markdown 快捷方式对照表（编辑器内打字时生效）：标题、粗斜删线、列表、待办、引用、代码块、水平线、提示框（admonition）、公式、内部链接等
-- HTML 语义标签对照表（API/脚本写入内容时使用）：标题、段落、强调、上下标、颜色、列表、表格、引用、代码、水平线、外部/内部链接
+- HTML 语义标签对照表（API/脚本写入内容时使用，含 Trilium 0.104.1 编辑器真实标记）：标题、段落、强调、上下标、字色、**五种警示块 `aside.admonition`**、字号类、高亮 marker、待办、表格、折叠块、脚注、mermaid、锚点、外链卡片、分页符、内部链接
 - 禁忌清单：禁止在 HTML 中混入 Markdown 语法（会原样显示）、禁止 `<br>` 堆砌排版、HTML 实体转义
 - 完整排版工作流：读取 → 识别结构 → 转换 → 备份 → 写入验证
 
 **转换脚本（scripts/md_to_trilium.py）**
 - Markdown → Trilium 兼容 HTML，**标题自动降一级**（`#` → `<h2>`）
 - 支持：粗体/斜体/删除线/行内代码、无序/有序列表（含嵌套）、待办（转 ☐/☑）、引用、代码块（自动转义）、水平线、段落
+- `--from-html`：把「Markdown 被当成纯文字塞进 `<p>`/`<br>`」的存量笔记还原成正常结构
+- `> [!NOTE]`/`[!TIP]`/`[!IMPORTANT]`/`[!CAUTION]`/`[!WARNING]` → Trilium 原生警示块
 - 纯 Python 标准库，零依赖，Python 3.8+，自带 `--selftest` 自检
 
 **写入通道（配合 trilium-notes skill）**
