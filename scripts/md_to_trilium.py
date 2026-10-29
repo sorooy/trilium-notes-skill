@@ -12,6 +12,7 @@ Trilium text note 内容存 HTML（CKEditor），H1 被笔记标题占用，
 用法：
     python md_to_trilium.py input.md            # 输出 HTML 到 stdout
     python md_to_trilium.py input.md -o out.html
+    python md_to_trilium.py 旧.html --from-html -o 新.html   # Markdown 被当文字存进 <p>/<br> 时
     python md_to_trilium.py --selftest          # 自检
 
 写入 Trilium（应用运行时，ETAPI 优先）：
@@ -66,6 +67,18 @@ def _list_html(items, base):
     return ''.join(parts)
 
 
+def unwrap_html(html_text: str) -> str:
+    """把「Markdown 被当文字塞进 <p>/<br>」的存量内容还原成 Markdown 源文本。
+
+    症状：整篇是一堆 <p>## 标题</p>、<p>* 要点<br>* 要点</p>，星号和 # 原样显示。
+    """
+    s = html_text.replace('&nbsp;', ' ')
+    s = re.sub(r'<br\s*/?>', '\n', s, flags=re.I)
+    s = re.sub(r'</p\s*>', '\n', s, flags=re.I)
+    s = re.sub(r'<p[^>]*>', '', s, flags=re.I)
+    return _html.unescape(s)
+
+
 def render(blocks: list) -> str:
     out = []
     for kind, data in blocks:
@@ -76,6 +89,9 @@ def render(blocks: list) -> str:
             out.append(f'<p>{inline(data)}</p>')
         elif kind == 'blockquote':
             out.append(f'<blockquote>{inline(data)}</blockquote>')
+        elif kind == 'admonition':
+            t, txt = data
+            out.append(f'<aside class="admonition {t}"><p>{inline(txt)}</p></aside>')
         elif kind == 'hr':
             out.append('<hr>')
         elif kind == 'code':
@@ -135,11 +151,23 @@ def parse(text: str) -> list:
             i += 1
             continue
 
-        # 引用
-        if stripped.startswith('> '):
+        # 引用 / 标注块（> [!NOTE] / [!TIP] / [!IMPORTANT] / [!CAUTION] / [!WARNING]）
+        if stripped.startswith('>'):
             flush()
-            blocks.append(('blockquote', stripped[2:]))
-            i += 1
+            body, kind = [], None
+            while i < len(lines) and lines[i].strip().startswith('>'):
+                t = lines[i].strip()[1:].strip()
+                m = re.match(r'^\[!(\w+)\]\s*$', t)
+                if m and kind is None:
+                    kind = m.group(1).lower()
+                elif t:
+                    body.append(t)
+                i += 1
+            text = ' '.join(body)
+            if kind in ('note', 'tip', 'important', 'caution', 'warning'):
+                blocks.append(('admonition', (kind, text)))
+            else:
+                blocks.append(('blockquote', text))
             continue
 
         # 列表：连续行聚合成 ul/ol（同缩进混合 ul/ol 各自成块，深缩进为子列表）
@@ -179,8 +207,8 @@ def parse(text: str) -> list:
     return blocks
 
 
-def convert(text: str) -> str:
-    return render(parse(text))
+def convert(text: str, from_html: bool = False) -> str:
+    return render(parse(unwrap_html(text) if from_html else text))
 
 
 SELFTEST = """# 标题一
@@ -212,9 +240,23 @@ def selftest():
     assert '<s>删线</s>' in out and '<code>代码</code>' in out
     assert '<ul>' in out and '<ol>' in out
     assert '<blockquote>引用一段话</blockquote>' in out
+
+    # GitHub 风格警示块 → Trilium admonition
+    adm = convert('> [!WARNING]\n> 这段有坑\n\n> [!NOTE]\n> 补充说明')
+    assert '<aside class="admonition warning"><p>这段有坑</p></aside>' in adm, 'admonition warning'
+    assert '<aside class="admonition note"><p>补充说明</p></aside>' in adm, 'admonition note'
     assert '<hr>' in out
     assert '<pre><code>print(&quot;hi&quot;)' in out, '代码块内容应做 HTML 转义'
     assert '**粗体**' not in out.replace('<strong>粗体</strong>', ''), '不得残留 Markdown 语法'
+
+    # --from-html：Markdown 被当文字存进 <p>/<br> 的存量内容也能还原
+    dumped = ('<p># 标题一<br>* **粗**要点</p><p>&nbsp;* 子项</p><p>---</p>'
+              '<p>```text<br>A -&gt; B<br>```</p>')
+    out2 = convert(dumped, from_html=True)
+    assert '<h2>标题一</h2>' in out2, 'from-html: h1 应降为 h2'
+    assert '<li><strong>粗</strong>要点<ul><li>子项</li></ul></li>' in out2, 'from-html: 子项应嵌套'
+    assert '<hr>' in out2 and '<pre><code>A -&gt; B</code></pre>' in out2, 'from-html: hr/代码块'
+    assert '<br' not in out2 and '<p>#' not in out2, 'from-html: 不得残留 br 或 <p>#'
     print('✅ selftest passed')
     return 0
 
@@ -227,7 +269,7 @@ def main():
         print(__doc__)
         return 1
     src = open(args[0], encoding='utf-8').read()
-    out = convert(src)
+    out = convert(src, from_html='--from-html' in args)
     if '-o' in args:
         open(args[args.index('-o') + 1], 'w', encoding='utf-8').write(out)
     else:
