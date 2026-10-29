@@ -16,7 +16,7 @@ Trilium Notes 文本笔记排版规范与转换工具（SKILL.md 格式，供 AI
 
 | 平台 | 命令 / 链接 |
 |------|-------------|
-| GitHub | `git clone https://github.com/sorooy/trilium-text-formatting.git` 或 [下载 ZIP](https://github.com/sorooy/trilium-text-formatting/archive/refs/heads/main.zip) |
+| GitHub | `git clone https://github.com/sorooy/trilium-text-formatting-skill.git` 或 [下载 ZIP](https://github.com/sorooy/trilium-text-formatting-skill/archive/refs/heads/main.zip) |
 | GitCode | `git clone https://gitcode.com/op00007/trilium-text-formatting.git` 或 [下载 ZIP](https://gitcode.com/op00007/trilium-text-formatting/-/archive/main/trilium-text-formatting-main.zip) |
 
 ### 方式 B：只要转换脚本（零依赖）
